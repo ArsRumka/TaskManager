@@ -6,8 +6,11 @@ using System.Threading.Tasks;
 
 namespace TaskManager.Presentation.Interfaces
 {
-    public interface IConsoleUI
+    public interface ITaskUi
     {
-       public Task RunAsync();
+        public Task GetAllAsync();
+        public Task CreateAsync();
+        public Task DeleteAsync();
+        public Task UpdateAsync();
     }
 }

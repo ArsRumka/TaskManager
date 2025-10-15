@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using TaskManager.Application.Abstraction;
+using TaskManager.Application.Interfaces;
 using TaskManager.Domain.Entities;
 using TaskManager.Infrastructure.Interfaces;
 
@@ -24,23 +24,23 @@ namespace TaskManager.Infrastructure.Repository
             using var connection = _connection.CreateConnection();
             const string sql = @"
                 INSERT INTO Tasks (Title, Description, IsCompleted, CreatedAt)
-                VALUES (@Title, @Description, @IsCompleted, @CreatedAt)";
+                VALUES (@Title, @Description, @IsCompleted, @CreateAt)";
             await connection.ExecuteAsync(sql, task);
         }
 
-        public async Task UpdateAsync(int id, bool isComplete)
+        public async Task<int> UpdateAsync(int id, bool isComplete)
         {
             
             using var connection = _connection.CreateConnection();
             const string sql = "UPDATE Tasks SET IsCompleted = @IsCompleted WHERE Id = @Id";
-            await connection.ExecuteAsync(sql, new { Id = id, IsCompleted = isComplete });
+            return await connection.ExecuteAsync(sql, new { Id = id, IsCompleted = isComplete });
         }
 
-        public async Task DeleteAsync(int id)
+        public async Task<int> DeleteAsync(int id)
         {
             using var connection = _connection.CreateConnection();
             const string sql = "DELETE FROM Tasks WHERE Id = @Id";
-            await connection.ExecuteAsync(sql, new { Id = id });
+            return await connection.ExecuteAsync(sql, new { Id = id });
         }
 
         public async Task<IEnumerable<Tasks>> GetAllAsync()
